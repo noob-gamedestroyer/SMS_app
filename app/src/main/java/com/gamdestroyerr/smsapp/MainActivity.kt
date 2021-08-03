@@ -29,9 +29,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         createNotificationChannel()
 
+        receiver = SmsBroadcastReceiver(binding,this)
         val permission = ContextCompat.checkSelfPermission(
             this,
             Manifest.permission.RECEIVE_SMS
@@ -41,7 +41,6 @@ class MainActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this, appPermission, SMS_REQUEST_CODE)
         }
 
-        receiver = SmsBroadcastReceiver(binding,this)
         IntentFilter(Telephony.Sms.Intents.SMS_RECEIVED_ACTION).also {
             registerReceiver(receiver, it)
         }
@@ -80,12 +79,6 @@ class MainActivity : AppCompatActivity() {
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
-
-
-//    override fun onStop() {
-//        super.onStop()
-//        unregisterReceiver(receiver)
-//    }
 
     companion object {
         private const val SMS_REQUEST_CODE = 100
